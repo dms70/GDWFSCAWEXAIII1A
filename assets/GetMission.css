@@ -1,0 +1,60 @@
+.green {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3rem;
+    margin: 0.5rem 0;
+    padding: 0 0.75rem;
+    border-radius: 4px; 
+    font-weight: bold;
+    font-size: 1rem;
+    background: hsla(120, 75%, 76%, 0.842);
+    color: hsl(0, 0%, 3%);
+  }
+
+  .blue {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3rem;
+    margin: 0.5rem 0;
+    padding: 0 0.75rem;
+    border-radius: 4px; 
+    font-weight: bold;
+    font-size: 1rem;
+    background: hsla(212, 92%, 53%, 0.979);
+    color: hsl(0, 0%, 3%);
+  }
+
+  .red {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3rem;
+    margin: 0.5rem 0;
+    padding: 0 0.75rem;
+    border-radius: 4px; 
+    font-weight: bold;
+    font-size: 1rem;
+    background: hsla(357, 92%, 53%, 0.979);
+    color: hsl(0, 0%, 3%);
+  }
+
+
+  .yellow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 3rem;
+    margin: 0.5rem 0;
+    padding: 0 0.75rem;
+    border-radius: 4px; 
+    font-weight: bold;
+    font-size: 1rem;
+    background: hsla(56, 92%, 53%, 0.979);
+    color: hsl(0, 0%, 3%);
+  }

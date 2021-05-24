@@ -1,0 +1,136 @@
+{# templates/base.html.twig #}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}MARCAIS{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="{{ asset('style.css') }}">
+    {% block stylesheets %}{% endblock %}
+  </head>
+
+{% block header %}
+ 
+
+<nav class="navbar navbar-expand-lg navbar-light " >
+  <a class="navbar-brand" href="#"> Gestion de données d'un service de missions</a>
+  
+ <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+  </svg>
+</button>
+
+ <div id="navbarContent" class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav nav-tabs nav-pills nav nav-fill  ">
+              <li class="nav-item"><a class="nav-link" href="{{ path('app_visitor') }}">Visiteur</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
+              <li class="nav-item active"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
+            </ul>
+  </div>
+  {# <div id="navbarContent" class=" collapse navbar-collapse justify-content-end " >
+
+  <a class="btn btn-light btn-lg" href="{{ path('app_visitor') }}" role="button">visitor</a>
+
+
+  <a class="btn btn-light btn-lg" href="{{ path('app_login') }}" role="button">Login</a>
+
+  <a class="btn btn-light btn-lg" href="{{ path('app_logout') }}" role="button">Logout</a>
+
+  </div> #}
+
+</nav>   
+
+
+{% endblock %}
+
+  {% block body %}
+  
+  <div class="card text-center">
+  <div class="card-body">
+    <h5 class="card-title">Contexte du projet : la BDD</h5>
+    <p class="card-text-1 text-start">
+    <li>
+    Les agents ont un nom, un prénom, une date de naissance, un code d'identification, une nationalité, 1 
+    ou plusieurs spécialités.
+    </li>
+    <li>
+    Les cibles ont un nom, un prénom, une date de naissance, un nom de code, une nationalité.
+    </li>
+    <li>
+    Les contacts ont un nom, un prénom, une date de naissance, un nom de code, une nationalité.
+    </li>
+    <li>
+    Les planques ont un code, une adresse, un pays, un type.
+    </li>
+    <li>
+    Les missions ont un titre, une description, un nom de code, un pays, 1 ou plusieurs agents, 1 ou 
+    plusieurs contacts, 1 ou plusieurs cibles, un type de mission (Surveillance, Assassinat, Infiltration …), un 
+    statut (En préparation, en cours, terminé, échec), 0 ou plusieurs planque, 1 spécialité requise, date de 
+    début, date de fin.
+    </li>
+   <li>
+    Les administrateurs ont un nom, un prénom, une adresse mail, un mot de passe, une date de création.
+    </li>
+     </p>
+    
+    <p class="fw-bold text-decoration-underline">Règle métier :</p>
+    <p class="card-text-2">
+    </li>
+    <li>
+    Sur une mission, la ou les cibles ne peuvent pas avoir la même nationalité que le ou les agents.
+    </li>
+    <li>
+    Sur une mission, les contacts sont obligatoirement de la nationalité du pays de la mission.
+    </li>
+    <li>
+    Sur une mission, la planque est obligatoirement dans le même pays que la mission.
+    </li>
+    <li>
+    Sur une mission, il faut assigner au moins 1 agent disposant de la spécialité requise.
+    </li>
+    </p>
+  </div>
+</div>
+  
+  
+  {% endblock %}
+  
+  
+  {% block javascripts %}
+  {% endblock %}
+
+
+  <footer class="row">
+    <div class="col-md-4 col-sm-12">
+      <span class="notice-legale nw">&copy; 2021 MARCAIS.ONLINE</span>
+    </div>
+
+    <div class="col-md-4 col-sm-12">
+      <span class="notice-legale nw">
+        Réalisation : <a href="http://www.marcais.online" 
+        title="Création de site internet dans le 92" class="notice-legale " 
+        target="_blank">MARCAIS AGENCE WEB</a>
+      </span>
+    </div>
+
+    <div class="col-md-4 col-sm-12">
+      <span class="notice-legale nw">
+        Groupe de Formation : <a href="https://www.studi.fr/" 
+        title="Création de site internet dans le 92" class="notice-legale " 
+        target="_blank">STUDI</a>
+      </span>
+    </div>
+
+  </footer>
+
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>  
+</html>
+
+

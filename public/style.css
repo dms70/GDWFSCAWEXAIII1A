@@ -1,0 +1,26 @@
+.navbar-nav .nav-item.active .nav-link,
+.navbar-nav .nav-item:hover .nav-link {
+    color: #ffffff;
+}
+
+
+footer {
+    clear: both;
+    background: #ecd5d8;
+    color: #FFFFFF;
+    height: 70px;
+}
+
+nav {
+    background: #d6c2c5;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+}
+
+
+

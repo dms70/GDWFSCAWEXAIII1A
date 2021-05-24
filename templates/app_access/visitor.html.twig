@@ -1,0 +1,61 @@
+{# templates/base.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block head %}
+
+        {% block stylesheets %}
+            {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+            {{ encore_entry_link_tags('appvisitor') }}
+
+            <!-- Renders a link tag (if your module requires any CSS)
+                 <link rel="stylesheet" href="/build/appvisitor.css"> -->
+        {% endblock %}
+
+        {% block javascripts %}
+            {{ encore_entry_script_tags('appvisitor') }}
+
+            <!-- Renders appvisitor.js & a webpack runtime.js file
+                <script src="/build/runtime.js" defer></script>
+                <script src="/build/appvisitor.js" defer></script>
+                See note below about the "defer" attribute -->
+        {% endblock %}
+{% endblock %}  
+
+
+{% block header %}
+
+<nav class="navbar navbar-expand-lg navbar-light " >
+  <a class="navbar-brand" href="#"> Gestion de données d'un service de missions</a>
+  
+ <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+  </svg>
+</button>
+
+ <div id="navbarContent" class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav nav-tabs nav-pills nav nav-fill  ">
+              <li class="nav-item active"><a class="nav-link" href="{{ path('app_visitor') }}">Visiteur</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
+            </ul>
+  </div>
+  {# <div id="navbarContent" class=" collapse navbar-collapse justify-content-end " >
+
+  <a class="btn btn-light btn-lg" href="{{ path('app_visitor') }}" role="button">visitor</a>
+
+
+  <a class="btn btn-light btn-lg" href="{{ path('app_login') }}" role="button">Login</a>
+
+  <a class="btn btn-light btn-lg" href="{{ path('app_logout') }}" role="button">Logout</a>
+
+  </div> #}
+
+</nav>  
+{% endblock %}
+
+
+{% block body %}<div id="rootvisitor"></div>{% endblock %}
+
+

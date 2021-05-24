@@ -1,0 +1,103 @@
+{# templates/security/login.html.twig #} {% extends 'base.html.twig' %} {% block
+title %}Log in!{% endblock %} 
+
+
+{% block header %}
+<nav class="navbar navbar-expand-lg navbar-light" >
+<a class="navbar-brand" href="#"> Gestion de données d'un service de missions</a>
+ 
+
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+  <path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+  </svg>
+</button>
+
+  <div id="navbarContent" class="collapse navbar-collapse justify-content-end">
+            <ul class="navbar-nav nav-tabs nav-pills nav nav-fill  ">
+              <li class="nav-item"><a class="nav-link " href="{{ path('app_visitor') }}">Visitor</a></li>
+              <li class="nav-item active"><a class="nav-link" href="{{ path('app_login') }}">Login</a></li>
+              <li class="nav-item"><a class="nav-link" href="{{ path('app_logout') }}">Logout</a></li>
+            </ul>
+  </div>
+  </nav>   
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <div class="row">
+    <div class="col-md-10 ml-md-auto">
+      <div class="">
+        <div class="card bg-light mb-3 mt-5" style="width: 800px;">
+          <div class="card-body">
+            <form class="form-horizontal" role="form" method="post">
+              <AmpContent>
+    {% if error %}
+        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {{ error.messageKey|trans(error.messageData, 'security') }}
+    {% endif %}
+              
+</NonAmpContent> <AmpContent>
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
+              
+</NonAmpContent>
+              <div class="card-header mb-3">Please sign in</div>
+              <div class="form-group">
+                <label for="email" class="col-md-4 control-label"
+                  >E-Mail Address</label
+                >
+                <div class="col-md-12">
+                  <input
+                    id="inputEmail"
+                    type="email"
+                    class="form-control"
+                    name="email"
+                    value="{{ last_username }}"
+                    required
+                    autofocus
+                  />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="password" class="col-md-4 control-label"
+                  >Password</label
+                >
+                <div class="col-md-12">
+                  <input
+                    id="inputPassword"
+                    type="password"
+                    class="form-control"
+                    name="password"
+                    required
+                  />
+                </div>
+              </div>
+              <input
+                type="hidden"
+                name="_csrf_token"
+                value="{{ csrf_token('authenticate') }}"
+              />
+              <div class="form-group">
+                <div class="col-md-12">
+                  <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-btn fa-sign-in"></i> Login
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+</div>
+
+{% endblock %}
+
