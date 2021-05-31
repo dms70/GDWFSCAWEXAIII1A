@@ -7,9 +7,14 @@ import Select from 'react-select';
 
 export default function DeleteAgents () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
 var [agents, setValueagents] = useState([]);
 
-var loadagents = useCallback(() => {customAxios.get("api/agents")
+var loadagents = useCallback(() => {customAxios.get("api/agents",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValueagents(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -30,8 +35,10 @@ var resetallValue = () => {
 const handleSubmit = (e) => {
   var id = selectedValueagents.value;
   e.preventDefault()
-  if ( typeof selectedValueagents.missions == "undefined" ) {
-  customAxios.delete('api/agents/' + id)
+  if ( selectedValueagents.missions.length == 0 ) {
+  customAxios.delete('api/agents/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
      resetallValue();

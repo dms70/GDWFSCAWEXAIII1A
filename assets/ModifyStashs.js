@@ -8,6 +8,9 @@ import Countries from './Countries';
 
 export default function ModifyStashs () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse  
+
 var [stashs, setValuestashs] = useState([]);
 
 var [Valueadress, getValueadress] = useState([]);
@@ -19,7 +22,9 @@ var [Valuecodename, getValuecodename] = useState([]);
 var listItems =[];
 
 var [datastashs, setstashs] = useState([]);
-var loadstashs = useCallback(() => {customAxios.get("api/stashs")
+var loadstashs = useCallback(() => {customAxios.get("api/stashs",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuestashs(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -42,7 +47,9 @@ var handleChangestashs  = (e) => {
 setSelectedValuestashs(e);
 var id = e.value;
 
-customAxios.get('api/stashs/' + id )
+customAxios.get('api/stashs/' + id ,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   
      .then((response) => {
       getValueid(response.data.id);
@@ -95,20 +102,40 @@ const handleSubmit = (e) => {
     type : type,
     adress:adress, 
     codename:parseInt(codename),
-    country:nationality})
+    country:nationality},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
     .then(res => {console.log(res)})
     .catch(error => console.log(error));
+
+      setcodename('');
+      setadress('');
+      settype('');     
+      setnationality('');
+      getValueid("");
+      getValueadress("");
+      getValuetype("");
+      getValuecodename("");
+      getValuenationality("");
+      loadstashs();
+      console.log(nationality);
+
 }
 
 
 var resetallValue = () => {
-
-  // console.log("type",type);
-  // console.log("adress",adress);
-  // console.log("codename",codename);
-  // console.log("nationality",nationality);
-
-
+      
+      setcodename('');
+      setadress('');
+      settype('');     
+      setnationality('');
+      getValueid("");
+      getValueadress("");
+      getValuetype("");
+      getValuecodename("");
+      getValuenationality("");
+      loadstashs();
+      console.log(nationality);
 }
 
 return (

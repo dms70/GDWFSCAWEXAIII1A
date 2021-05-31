@@ -39,11 +39,6 @@ class Stashs
      */
     private $type;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Missions::class, inversedBy="stashs")
-     */
-    private $missions;
-
     public function getId(): ?int
     {
         return $this->id;
@@ -93,18 +88,6 @@ class Stashs
     public function setType(string $type): self
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getMissions(): ?Missions
-    {
-        return $this->missions;
-    }
-
-    public function setMissions(?Missions $missions): self
-    {
-        $this->missions = $missions;
 
         return $this;
     }

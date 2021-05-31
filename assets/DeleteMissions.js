@@ -7,10 +7,15 @@ import Select from 'react-select';
 
 export default function DeleteMissions () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
 var [missions, setValuemissions] = useState([]);
 var [selectedValuemissions, setSelectedValuemissions] = useState([]);
 
-var loadmissions = useCallback(() => {customAxios.get("api/missions")
+var loadmissions = useCallback(() => {customAxios.get("api/missions",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuemissions(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -50,7 +55,7 @@ return (
 
 <Form onSubmit={handleSubmit}>
   <Form.Group as={Col} lg="4">
-    <Form.Label>Choisir le contact à supprimer</Form.Label>     
+    <Form.Label>Choisir la mission à supprimer</Form.Label>     
         <Select
         className="reactSelectcontact"
         placeholder="Select missions"

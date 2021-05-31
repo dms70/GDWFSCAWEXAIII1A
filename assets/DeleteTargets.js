@@ -7,9 +7,15 @@ import Select from 'react-select';
 
 export default function DeleteTargets () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
+
 var [targets, setValuetargets] = useState([]);
 
-var loadtargets = useCallback(() => {customAxios.get("api/targets")
+var loadtargets = useCallback(() => {customAxios.get("api/targets",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuetargets(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -41,8 +47,10 @@ const handleSubmit = (e) => {
   var id = selectedValuetargets.value;
   //console.log("e.id",id);
   event.preventDefault()
-  if ( typeof selectedValuetargets.missions == "undefined" ) {
-  customAxios.delete('api/targets/' + id)
+  if ( selectedValuetargets.missions.length == 0 ) {
+  customAxios.delete('api/targets/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
     
      .then(res => {console.log(res)})
      .catch(error => console.log(error));

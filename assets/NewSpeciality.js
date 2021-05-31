@@ -7,6 +7,9 @@ import customAxios from './customAxios';
 
 export default function NewSpeciality () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
 const [dataToPost, setPostValue] = useState({typem: '',})
 
 var [speciality, setspeciality] = useState ('');
@@ -32,7 +35,9 @@ const handleSubmit = (e) => {
   e.preventDefault()
   const API_URL = process.env.REACT_APP_API_URL;
   console.log(API_URL); 
-  customAxios.post('api/specialities', {type:speciality})
+  customAxios.post('api/specialities', {type:speciality},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
   resetallValue();   

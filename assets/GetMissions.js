@@ -5,9 +5,14 @@ import { useHistory } from "react-router-dom";
 
 export default function GetMissions () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
 var [GetValue, setGetValue] = useState('');
 
-var loadapi = useCallback(() => {customAxios.get("api/missions")
+var loadapi = useCallback(() => {customAxios.get("api/missions",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setGetValue(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);

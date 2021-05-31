@@ -56,11 +56,6 @@ class Agents
      */
     private $speciality;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Missions::class, inversedBy="agents")
-     */
-    private $missions;
-
 
     public function __construct()
     {
@@ -155,19 +150,6 @@ class Agents
 
         return $this;
     }
-
-    public function getMissions(): ?Missions
-    {
-        return $this->missions;
-    }
-
-    public function setMissions(?Missions $missions): self
-    {
-        $this->missions = $missions;
-
-        return $this;
-    }
-
 
 
   

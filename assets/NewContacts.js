@@ -8,6 +8,9 @@ import makeAnimated from 'react-select/animated';
 
 export default function NewContacts () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse  
+
 const animatedComponents = makeAnimated();
 
 const [nameContact, setnameContact] = useState ('');
@@ -65,7 +68,9 @@ const handleSubmitContact = (e) => {
      surname:surname, 
      birthdate:birthdate,
      codename:codename,
-     nationality:nationality})
+     nationality:nationality},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi,}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
     resetallValue();

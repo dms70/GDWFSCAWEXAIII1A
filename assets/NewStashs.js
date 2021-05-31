@@ -8,6 +8,9 @@ import makeAnimated from 'react-select/animated';
 
 export default function NewStashs () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse 
+
 const [codename, setcodename] = useState (0);
 const [adress, setadress] = useState ('');
 const [nationality, setnationality] = useState ('');
@@ -44,7 +47,9 @@ const handleSubmitType = (e) => {
      codename:parseInt(codename),
      adress : adress,     
      country:nationality,
-     type:type})
+     type:type},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
      resetallValue();  

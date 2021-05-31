@@ -3,9 +3,14 @@ import customAxios from './customAxios';
 
 export default function GetContacts () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
 var [GetValue, setGetValue] = useState('');
 
-var loadapi = useCallback(() => {customAxios.get("api/contacts")
+var loadapi = useCallback(() => {customAxios.get("api/contacts",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setGetValue(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);

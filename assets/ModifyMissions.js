@@ -11,6 +11,8 @@ import axiosRetry from 'axios-retry';
 
 export default function ModifyMissions() {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
 
 var [Valueid, getValueid] = useState([]);
 var [Valuetitle, getValuetitle] = useState([]);
@@ -70,7 +72,9 @@ var handleChangeEnddate = (e) => {
 
 var [target, setValuetarget] = useState([]);
 var [datatarget, settarget] = useState([]);
-var loadtarget = useCallback(() => {customAxios.get("api/targets")
+var loadtarget = useCallback(() => {customAxios.get("api/targets",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuetarget(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -80,7 +84,9 @@ var optionstarget = Object.values(target).map(({ id, name, nationality }) => ({ 
 
 var [speciality, setValuespeciality] = useState([]);
 var [dataspeciality, setspeciality] = useState([]);
-var loadspeciality = useCallback(() => {customAxios.get("api/specialities")
+var loadspeciality = useCallback(() => {customAxios.get("api/specialities",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuespeciality(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -96,7 +102,9 @@ var optionsspeciality = Object.values(speciality).map(({ id, type }) => ({ label
 var [agent, setValueAgent] = useState([]);
 var  [dataagent, setagent] = useState([]);
 
-const loadagents = useCallback(() => {customAxios.get("api/agents")
+const loadagents = useCallback(() => {customAxios.get("api/agents",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValueAgent(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -147,7 +155,9 @@ var [nationality, setnationality] = useState ('France');
 
 var [contact, setValuecontact] = useState([]);
 var [datacontact, setcontact] = useState([]);
-var loadcontacts = useCallback(() => {customAxios.get("api/contacts")
+var loadcontacts = useCallback(() => {customAxios.get("api/contacts",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuecontact(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -157,7 +167,9 @@ var loadcontacts = useCallback(() => {customAxios.get("api/contacts")
 
 var [stashs, setValuestashs] = useState([]);
 var [datastashs, setstashs] = useState([]);
-var loadstashs = useCallback(() => {customAxios.get("api/stashs")
+var loadstashs = useCallback(() => {customAxios.get("api/stashs",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuestashs(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -173,7 +185,7 @@ loadcontacts();
 }, [loadagents,loadtarget,loadspeciality,loadstashs,loadcontacts]);
 
 
-var optionsstashs = Object.values(stashs).map(({ id, codename }) => ({ label: codename, value: id }));
+var optionsstashs = Object.values(stashs).map(({ id, type }) => ({ label: type, value: id }));
 var optionsagent = Object.values(agent).map(({ id, name, isDisabled }) => ({ label: name, value: id , isDisabled:isDisabled}));
 var optionscontact = Object.values(contact).map(({ id, name }) => ({ label: name, value: id }))
 
@@ -267,16 +279,16 @@ var [selectedValueSpeciality, setSelectedValueSpeciality] = useState([]);
 
   function handleChangeAgent(e)  {
 
+    console.log("e:",e);
 
     setSelectedValueAgent(Array.isArray(e) ? e.map(x => x.value) : []);
-    console.log("e:",e);
+    
     console.log("selectedValueAgent",selectedValueAgent);
 
     optionsagent = Object.values(agent).map(({ id, name, isDisabled }) => ({ label: name, value: id , isDisabled:"true"}));
     setoptionsagent(optionsagent);
     
-    console.log("optionsagenthandle" , optionsagent);
-    
+    console.log("optionsagenthandle" , optionsagent);   
     
     }
     
@@ -330,7 +342,9 @@ setoptionsstashs(optionsstashs);
 
 var [missions, setValuemissions] = useState([]);
 
-var loadmissions = useCallback(() => {customAxios.get("api/missions")
+var loadmissions = useCallback(() => {customAxios.get("api/missions",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuemissions(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -355,8 +369,9 @@ console.log("e.value",e.value);
 var id = e.value;
 
 
-
-customAxios.get('api/missions/' + id )
+customAxios.get('api/missions/' + id ,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   
      .then((response) => {
       getValueid(response.data.id); 
@@ -380,9 +395,16 @@ customAxios.get('api/missions/' + id )
       setstatus(response.data.status);
 
       getValuebegindate(response.data.begindate); 
-      var now = new Date(response.data.begindate);
-      var dateString = now.toISOString().slice(0, 10)
-      setbegindate(dateString);    
+      var dateStringBegin = response.data.begindate.substr(0, 10);
+      //var now = new Date(response.data.begindate);
+      //var dateStringBegin = now.toISOString().slice(0, 10);
+      setbegindate(dateStringBegin);  
+      
+      getValueenddate(response.data.enddate); 
+      if (response.data.enddate != undefined) {
+        var dateStringend = response.data.enddate.substr(0, 10);
+        setenddate(dateStringend);  
+      }
 
       getValuespeciality(response.data.speciality);
       console.log(response.data.speciality);
@@ -443,11 +465,27 @@ customAxios.get('api/missions/' + id )
 }
 
 
-
 const handleSubmit = (e) => {
 e.preventDefault();
 
-customAxios.put('api/missions', {
+console.log("title",title);
+console.log("description",description);
+console.log("codename",codename);
+console.log("country",nationality);
+console.log("type",type);
+console.log("nationality",nationality);
+console.log("status",status);
+console.log("begindate",begindate);
+console.log("enddate",enddate);
+console.log("Valuespeciality",Valuespeciality);
+console.log("Valueagents",Valueagents);
+
+
+var id = selectedValuemissions.value;
+console.log('selectedValuemissions.value',selectedValuemissions.value);
+console.log("enddate",enddate);
+if (enddate != "") {
+customAxios.put('api/missions/' + id , {
      title : title,
      description:description, 
      codename:codename,
@@ -456,52 +494,86 @@ customAxios.put('api/missions', {
      status:status,
      begindate:begindate,
      enddate:enddate,
-     speciality:choicespeciality,
-     agents:dataagent,
-     contacts:datacontact,
-     targets:datatarget,
-     stashs:datastashs,         
-     })
+    
+     },)
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
+    } else {
+
+      customAxios.put('api/missions/' + id , {
+        title : title,
+        description:description, 
+        codename:codename,
+        country:nationality,
+        type:type,
+        status:status,
+        begindate:begindate,
+       
+        },)
+        .then(res => {console.log(res)})
+        .catch(error => console.log(error));
+
+    }
+      getValueid(""); 
+      getValuetitle(""); 
+      settitle(""); 
+      getValuedescription(""); 
+      setdescription(""); 
+      getValuecodename(""); 
+      setcodename(""); 
+      getValuenationality(""); 
+      setnationality(""); 
+      getValuetype(""); 
+      settype(""); 
+      getValuestatus(""); 
+      setstatus(""); 
+      getValuebegindate(""); 
+      setbegindate("");    
+      getValueenddate(""); 
+      setenddate("");
+      getValuespeciality(""); 
+      getValueagents(""); 
+      getValuecontacts(""); 
+      getValuetargets(""); 
+      getValuestashs(""); 
+      setSelectedValueSpeciality(""); 
+      setSelectedValuestashs(""); 
+      setSelectedValuecontacts(""); 
+      selectedValueTarget(""); 
+      setSelectedValueAgent(""); 
+      loadmissions();
 }
 
 
 var resetallValue = () => {
 
-// console.log("title",title);
-// console.log("description",description);
-// console.log("codename",codename);
-// console.log("country",nationality);
-// console.log("type",type);
-// console.log("nationality",nationality);
-// console.log("status",status);
-// console.log("begindate",begindate);
-
-// console.log("selectedValueSpeciality",selectedValueSpeciality);
-
-
-var agentslist = [];
-  for (let i = 0; i < (selectedValueagents.length) ; i++) {
-    agentslist.push("/api/agents/" + selectedValueagents[i]);
-    }
-console.log("selectedValuecontacts.length",selectedValuecontacts.length);
-          var contactslist = [];
-  for (let i = 0; i < (selectedValuecontacts.length) ; i++) {
-    contactslist.push("/api/contacts/" + selectedValuecontacts[i]);
-    }
-
-    
-          var targetslist = [];
-  for (let i = 0; i < (selectedValuetarget.length) ; i++) {
-    targetslist.push("/api/targets/" + selectedValuetarget[i]);
-    }
-
-          var stashslist = [];
-  for (let i = 0; i < (selectedValuestashs.length) ; i++) {
-    stashslist.push("/api/stashs/" + selectedValuestashs[i]);
-    }
-
+      getValueid(""); 
+      getValuetitle(""); 
+      settitle(""); 
+      getValuedescription(""); 
+      setdescription(""); 
+      getValuecodename(""); 
+      setcodename(""); 
+      getValuenationality(""); 
+      setnationality(""); 
+      getValuetype(""); 
+      settype(""); 
+      getValuestatus(""); 
+      setstatus(""); 
+      getValuebegindate(""); 
+      setbegindate(""); 
+      setenddate("");    
+      getValuespeciality(""); 
+      getValueagents(""); 
+      getValuecontacts(""); 
+      getValuetargets(""); 
+      getValuestashs(""); 
+      setSelectedValueSpeciality(""); 
+      setSelectedValuestashs(""); 
+      setSelectedValuecontacts(""); 
+      selectedValueTarget(""); 
+      setSelectedValueAgent(""); 
+      loadmissions();
 
 }
 

@@ -1,4 +1,8 @@
 import React from 'react';
+import useEffect from 'react';
+
+import AsyncStorage from 'react';
+
 import ReactDom from 'react-dom';
 import Header from './Header';
 import NewMissions from "./NewMissions";
@@ -25,20 +29,11 @@ import ModifyContacts from "./ModifyContacts";
 import GetStashs from "./GetStashs";
 import DeleteStashs from "./DeleteStashs";
 import ModifyStashs from "./ModifyStashs";
+import gettoken from "./gettoken";
 
 import {Switch, Route, BrowserRouter as Router} from 'react-router-dom'  
 
-document.addEventListener('DOMContentLoaded', function() {
-  var userRating = document.querySelector('.js-user-rating');
-  console.log("userRating",userRating);
-  let token = userRating.dataset.isAuthenticated;
-  localStorage.setItem("token",token)
-
-});
-
-var tokentuse = localStorage.getItem("token");
-
-console.log("token2",tokentuse);
+gettoken();
 
 ReactDom.render(
     <React.StrictMode>

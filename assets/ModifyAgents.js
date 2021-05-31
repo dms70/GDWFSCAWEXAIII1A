@@ -5,10 +5,11 @@ import React,{useState,useCallback,useEffect} from 'react';
 import customAxios from './customAxios';
 import Select from 'react-select';
 import Countries from './Countries';
-import Redirection from './Redirection';
-//import { optionsspeciality } from './optionsspeciality';
 
 export default function ModifyAgents () {
+
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse   
 
 var [agents, setValueagents] = useState([]);
 
@@ -25,13 +26,17 @@ var listItems =[];
 
 
 var [dataagents, setagents] = useState([]);
-var loadagents = useCallback(() => {customAxios.get("api/agents")
+var loadagents = useCallback(() => {customAxios.get("api/agents",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValueagents(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
 
 
-var loadspeciality = useCallback(() => {customAxios.get("api/specialities")
+var loadspeciality = useCallback(() => {customAxios.get("api/specialities",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValue(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -64,7 +69,9 @@ console.log("selectedValueagents.id",selectedValueagents.id);
 console.log("e.value",e.value);
 var id = e.value;
 
-customAxios.get('api/agents/' + id )
+customAxios.get('api/agents/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   
      .then((response) => {
       getValueid(response.data.id);
@@ -130,7 +137,7 @@ var  handleChangenationality = (e) => {
 
 
 function handleChangeSpeciality (e){
-  setSelectedValueSpeciality(Array.isArray(e) ? e.map(x => x.value) : []);
+  //setSelectedValueSpeciality(Array.isArray(e) ? e.map(x => x.value) : []);
 }
 
 const handleSubmit = (e) => {
@@ -152,12 +159,44 @@ const handleSubmit = (e) => {
 
   e.preventDefault();
 
-customAxios.put('api/agents/' + id , {name : nameAgent,surname:surname, birthdate:birthdate,codename:parseInt(codename),nationality:nationality,speciality : speclist})
+customAxios.put('api/agents/' + id , {name : nameAgent,surname:surname, birthdate:birthdate,codename:parseInt(codename),nationality:nationality,speciality : speclist},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
 .then(res => {console.log(res)})
 .catch(error => console.log(error));
 
+      getValueid("");
+      getValuename("");
+      setnameAgent("");
+      getValuesurname("");
+      setsurname("");
+      getValuebirthdate("");
+      setbirthdate("");
+      getValuecodename("");
+      setcodename("");
+      getValuenationality("");
+      setnationality("");
+      getValuespeciality("");
+      setSelectedValueSpeciality("");
+      loadagents();
+}
 
-
+var resetallValue = () => {
+      
+      getValueid("");
+      getValuename("");
+      setnameAgent("");
+      getValuesurname("");
+      setsurname("");
+      getValuebirthdate("");
+      setbirthdate("");
+      getValuecodename("");
+      setcodename("");
+      getValuenationality("");
+      setnationality("");
+      getValuespeciality("");
+      setSelectedValueSpeciality("");
+      loadagents();
 }
 
 return (
@@ -229,6 +268,11 @@ return (
     <Form.Group  controlId="ButtonsubmitMission">
     <div className="col-md-12 text-center">
     <Button onClick={handleSubmit}>VALIDATION</Button> 
+    </div>
+    </Form.Group>
+    <Form.Group  controlId="ButtonresetallValueMission">
+    <div className="col-md-12 text-center">
+    <Button onClick={resetallValue}>EFFACER</Button>
     </div>
     </Form.Group>
   </Form.Row>

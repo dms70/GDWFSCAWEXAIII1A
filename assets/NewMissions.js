@@ -1,19 +1,18 @@
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Button";
 import React,{useState,useEffect,useCallback,useRef} from 'react';
-import { useDispatch } from 'react-redux'
 import "./country.json";
 import Countries from './Countries';
 import customAxios from './customAxios';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import DropdownMultiselect from "react-multiselect-dropdown-bootstrap";
 
 export default function Missions() {
+
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
 
 const animatedComponentscontact = makeAnimated();
 
@@ -53,7 +52,9 @@ var handleChangeBegindate = (e) => {
 
 var [target, setValuetarget] = useState([]);
 var [datatarget, settarget] = useState([]);
-var loadtarget = useCallback(() => {customAxios.get("api/targets")
+var loadtarget = useCallback(() => {customAxios.get("api/targets",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuetarget(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -63,7 +64,9 @@ var optionstarget = Object.values(target).map(({ id, name, nationality }) => ({ 
 
 var [speciality, setValuespeciality] = useState([]);
 var [dataspeciality, setspeciality] = useState([]);
-var loadspeciality = useCallback(() => {customAxios.get("api/specialities")
+var loadspeciality = useCallback(() => {customAxios.get("api/specialities",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuespeciality(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -78,7 +81,9 @@ var optionsspeciality = Object.values(speciality).map(({ id, type }) => ({ label
 var [agent, setValueAgent] = useState([]);
 var  [dataagent, setagent] = useState([]);
 
-const loadagents = useCallback(() => {customAxios.get("api/agents")
+const loadagents = useCallback(() => {customAxios.get("api/agents",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValueAgent(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -129,7 +134,9 @@ var [nationality, setnationality] = useState ('');
 
 var [contact, setValuecontact] = useState([]);
 var [datacontact, setcontact] = useState([]);
-var loadcontacts = useCallback(() => {customAxios.get("api/contacts")
+var loadcontacts = useCallback(() => {customAxios.get("api/contacts",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuecontact(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -137,7 +144,9 @@ var loadcontacts = useCallback(() => {customAxios.get("api/contacts")
 
 var [stashs, setValuestashs] = useState([]);
 var [datastashs, setstashs] = useState([]);
-var loadstashs = useCallback(() => {customAxios.get("api/stashs")
+var loadstashs = useCallback(() => {customAxios.get("api/stashs",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuestashs(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -169,6 +178,7 @@ function handleChangeTarget (e){
 
 resetValueAgent();
 resetValueSpeciality();
+resetValueContact();
 
 for (let j = 0; j < (agent.length) ; j++) {
 Object.assign(agent[j],{isDisabled:"false"});
@@ -211,7 +221,9 @@ var [Valueagents, getValueagents] = useState([]);
 
 var  choiceidspeciality = [];
 
-var getagentswithspec = useCallback((id) => {customAxios.get('api/specialities/' + id )
+var getagentswithspec = useCallback((id) => {customAxios.get('api/specialities/' + id ,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
 .then(function (response) {
   getValueagents(response.data.agents);
   console.log("getValueagents",response.data.agents);
@@ -220,13 +232,11 @@ var getagentswithspec = useCallback((id) => {customAxios.get('api/specialities/'
 
 
 var handleChangeSpeciality = (e) => {
+resetValueAgent();
+
+
 setSelectedValueSpeciality(e.value);
 setspeciality(e.value);
-// console.log("selectedValueSpeciality",selectedValueSpeciality);
-// console.log("selectedValueSpeciality.id",selectedValueSpeciality.id);
-// console.log("e",e);
-// console.log("e.LABEL",e.label);
-// console.log("e.value",e.value);
 
 var id = e.value;
 
@@ -265,10 +275,16 @@ setoptionsagent(optionsagent);
 
 function handleChangeAgent(e)  {
 
-setSelectedValueAgent(Array.isArray(e) ? e.map(x => x.value) : []);
+  console.log("e:",e);
 
-optionsagent = Object.values(agent).map(({ id, name, isDisabled }) => ({ label: name, value: id , isDisabled:"true"}));
-setoptionsagent(optionsagent);
+  setSelectedValueAgent(Array.isArray(e) ? e.map(x => x.value) : []);
+  
+  console.log("selectedValueAgent",selectedValueAgent);
+
+  //optionsagent = Object.values(agent).map(({ id, name, isDisabled }) => ({ label: name, value: id , isDisabled:"true"}));
+  //setoptionsagent(optionsagent);
+  
+  console.log("optionsagenthandle" , optionsagent);   
 
 }
 
@@ -315,7 +331,7 @@ if (stashs[i].country == e.target.value ){
 }
 }
 
-optionsstashs = Object.values(copystashs).map(({ id, codename }) => ({ label: codename, value: id }))
+optionsstashs = Object.values(copystashs).map(({ id, codename, type}) => ({ label: type, value: id }))
 setoptionsstashs(optionsstashs);
 
 }
@@ -362,9 +378,45 @@ customAxios.post('api/missions', {
      targets:choiceidtarget,
      stashs:choiceidstashs,     
      contacts:choiceidcontact,    
-     })
+     },{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
+
+
+     settitle(""); 
+     setdescription(""); 
+     setcodename(""); 
+     setnationality(""); 
+     settype(""); 
+     setstatus(""); 
+     setbegindate("");    
+     setSelectedValueSpeciality(""); 
+     setSelectedValueAgent([]);
+     setSelectedValueContact([]);
+     setSelectedValueTarget([]);
+     setSelectedValueStash([]);
+
+}
+
+
+var resetallValue = () => {
+
+  settitle(""); 
+  setdescription(""); 
+  setcodename(""); 
+  setnationality(""); 
+  settype(""); 
+  setstatus(""); 
+  setbegindate("");    
+  setenddate(""); 
+  setSelectedValueSpeciality(""); 
+  setSelectedValueAgent([]);
+  setSelectedValueContact([]);
+  setSelectedValueTarget([]);
+  setSelectedValueStash([]);
+
 }
 
 

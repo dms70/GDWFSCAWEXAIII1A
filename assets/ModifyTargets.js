@@ -8,6 +8,10 @@ import Countries from './Countries';
 
 export default function ModifyTargets () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
+
 var [targets, setValuetargets] = useState([]);
 
 var [Valuename, getValuename] = useState([]);
@@ -21,7 +25,9 @@ var [Valuespeciality, getValuespeciality] = useState([]);
 var listItems =[];
 
 var [datatargets, settargets] = useState([]);
-var loadtargets = useCallback(() => {customAxios.get("api/targets")
+var loadtargets = useCallback(() => {customAxios.get("api/targets",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuetargets(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -45,7 +51,9 @@ var handleChangetargets  = (e) => {
 setSelectedValuetargets(e);
 var id = e.value;
 
-customAxios.get('api/targets/' + id )
+customAxios.get('api/targets/' + id ,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   
      .then((response) => {
       getValueid(response.data.id);
@@ -91,11 +99,6 @@ var  handleChangenationality = (e) => {
 
 const handleSubmit = (e) => {
 
-  // console.log("namecontact",namecontact);
-  // console.log("surname",surname);
-  // console.log("birthdate",birthdate);
-  // console.log("codename",codename);
-  // console.log("nationality",nationality);
 
   var id = selectedValuetargets.value;
 
@@ -106,19 +109,42 @@ const handleSubmit = (e) => {
     surname:surname, 
     birthdate:birthdate,
     codename:codename,
-    nationality:nationality})
+    nationality:nationality},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
     .then(res => {console.log(res)})
     .catch(error => console.log(error));
+
+      getValueid("");
+      getValuename("");
+      setnamecontact("");
+      getValuesurname("");
+      setsurname("");
+      getValuebirthdate("");
+      setbirthdate("");    
+      getValuecodename("");
+      setcodename("");
+      getValuenationality("");
+      setnationality("");
+      loadtargets();
+
 }
 
 
 var resetallValue = () => {
 
-  // console.log("namecontact",namecontact);
-  // console.log("surname",surname);
-  // console.log("birthdate",birthdate);
-  // console.log("codename",codename);
-  // console.log("nationality",nationality);
+      getValueid("");
+      getValuename("");
+      setnamecontact("");
+      getValuesurname("");
+      setsurname("");
+      getValuebirthdate("");
+      setbirthdate("");    
+      getValuecodename("");
+      setcodename("");
+      getValuenationality("");
+      setnationality("");
+      loadtargets();
 
 }
 

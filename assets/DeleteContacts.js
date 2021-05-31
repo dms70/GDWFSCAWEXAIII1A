@@ -8,10 +8,15 @@ import Select from 'react-select';
 
 export default function DeleteContacts () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
 var [contacts, setValuecontacts] = useState([]);
 var [datacontacts, setcontacts] = useState([]);
 
-var loadcontacts = useCallback(() => {customAxios.get("api/contacts")
+var loadcontacts = useCallback(() => {customAxios.get("api/contacts",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuecontacts(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -42,8 +47,10 @@ const handleSubmit = (e) => {
   var id = selectedValuecontacts.value;
   //console.log("e.id",id);
   e.preventDefault()
-  if ( typeof selectedValuecontacts.missions == "undefined" ) {
-  customAxios.delete('api/contacts/' + id)
+  if ( selectedValuecontacts.missions.length == 0) {
+  customAxios.delete('api/contacts/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
      resetallValue();

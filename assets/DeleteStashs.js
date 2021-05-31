@@ -8,9 +8,15 @@ import Select from 'react-select';
 
 export default function DeleteStashs () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse
+
+
 var [stashs, setValuestashs] = useState([]);
 
-var loadstashs = useCallback(() => {customAxios.get("api/stashs")
+var loadstashs = useCallback(() => {customAxios.get("api/stashs",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuestashs(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -40,9 +46,11 @@ const handleSubmit = (e) => {
   var id = selectedValuestashs.value;
   console.log("selectedValuestashs",selectedValuestashs);
   console.log("e.id",id);
-  event.preventDefault()
-  if ( typeof selectedValuestashs.missions == "undefined" ) {
-  customAxios.delete('api/stashs/' + id)
+  e.preventDefault()
+  if ( selectedValuestashs.missions.length == 0 ) {
+  customAxios.delete('api/stashs/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
      resetallValue();

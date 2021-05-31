@@ -7,11 +7,16 @@ import customAxios from './customAxios';
 
 export default function DeleteSpeciality () {
 
+ var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse 
+
 var [speciality, setValuespeciality] = useState([]);
 var [selectedValueSpeciality, setSelectedValueSpeciality] = useState([]);
 var optionsspeciality = Object.values(speciality).map(({ id, type, agents }) => ({ label: type, value: id , agents : agents}))
 
-var loadspeciality = useCallback(() => {customAxios.get("api/specialities")
+var loadspeciality = useCallback(() => {customAxios.get("api/specialities",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuespeciality(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -39,7 +44,9 @@ const handleSubmit = (e) => {
   event.preventDefault()
   if ( selectedValueSpeciality.agents.length == 0 ) {
     
-  customAxios.delete('/api/specialities/' + id)
+  customAxios.delete('/api/specialities/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
      resetallValue();

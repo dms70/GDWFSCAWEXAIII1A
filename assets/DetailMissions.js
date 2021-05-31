@@ -12,6 +12,9 @@ import axiosRetry from 'axios-retry';
 
 export default function DetailMissions() {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse 
+
 const animatedComponentscontact = makeAnimated();
 
 var [Valueid, getValueid] = useState([]);
@@ -22,6 +25,7 @@ var [Valuenationality, getValuenationality] = useState([]);
 var [Valuetype, getValuetype] = useState([]);
 var [Valuestatus, getValuestatus] = useState([]);
 var [Valuebegindate, getValuebegindate] = useState([]);
+var [Valueenddate, getValueenddate] = useState([]);
 var [Valuespeciality, getValuespeciality] = useState([]);
 var [Valueagents, getValueagents] = useState([]);
 var [Valuecontacts, getValuecontacts] = useState([]);
@@ -34,6 +38,7 @@ var [codename, setcodename] = useState ('');
 var [type, settype] = useState ('');
 var [status, setstatus] = useState ('');
 var [begindate, setbegindate] = useState ('');
+var [enddate, setenddate] = useState ('');
 var [choicespeciality,setchoicespeciality] =  useState ('');
 
 var [target, setValuetarget] = useState([]);
@@ -42,37 +47,51 @@ var [datatarget, settarget] = useState([]);
 axiosRetry(customAxios, { retries: 10 });
 
 
-function loadtarget ()  {customAxios.get("api/targets")
+function loadtarget ()  {customAxios.get("api/targets",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuetarget(response.data['hydra:member'])})
   .catch(error => console.log(error));
 };
 
-function loadcontacts () {customAxios.get("api/contacts")
+function loadcontacts () {customAxios.get("api/contacts",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuecontact(response.data['hydra:member'])})
   .catch(error => console.log(error));
 };
 
-function loadtarget () {customAxios.get("api/targets")
+function loadtarget () {customAxios.get("api/targets",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
     .then(function (response) {setValuetarget(response.data['hydra:member'])})
     .catch(error => console.log(error));
 };
 
-function loadspeciality () {customAxios.get("api/specialities")
+function loadspeciality () {customAxios.get("api/specialities",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuespeciality(response.data['hydra:member'])})
   .catch(error => console.log(error));
 };
 
-function loadagents () {customAxios.get("api/agents")
+function loadagents () {customAxios.get("api/agents",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValueAgent(response.data['hydra:member'])})
   .catch(error => console.log(error));
 };
 
-function loadstashs () {customAxios.get("api/stashs")
+function loadstashs () {customAxios.get("api/stashs",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuestashs(response.data['hydra:member'])})
   .catch(error => console.log(error));
 };
 
-function loadmissions () {customAxios.get("api/missions")
+function loadmissions () {customAxios.get("api/missions",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuemissions(response.data['hydra:member'])})
   .catch(error => console.log(error));
 };
@@ -96,7 +115,10 @@ var handleChangeStatus = (e) => {
   
   
 var handleChangeBegindate = (e) => {
-  }
+}
+
+var handleChangeEnddate = (e) => {
+}
   
 var [target, setValuetarget] = useState([]);
 var [datatarget, settarget] = useState([]);
@@ -125,9 +147,7 @@ var [optionscontact, setoptionscontact] = useState([]);
 var [selectedValuecontacts, setSelectedValuecontacts] = useState([]);
 var [optionsstashs, setoptionsstashs] = useState([]);
 var [selectedValuestashs, setSelectedValuestashs] = useState([]);
-//var [optionstarget, setoptionstarget] = useState([]);
 var [selectedValuetarget, selectedValueTarget] = useState([]);
-//var [optionsspeciality, setoptionsspeciality] = useState([]);
 var [selectedValueSpeciality, setSelectedValueSpeciality] = useState([]);
 var [optionsagent, setoptionsagent] = useState([]);
 var [selectedValueagents, setSelectedValueAgent] = useState([]);
@@ -137,9 +157,6 @@ var [selectedValueagents, setSelectedValueAgent] = useState([]);
     setSelectedValuecontacts(Array.isArray(e) ? e.map(x => x.value) : []);
     console.log("e:",e);
     console.log("selectedValuecontacts",selectedValuecontacts);
-
-    //setcontact(datacontact => [...datacontact, "/api/contacts/" + e[datacontact.length].value]);
-    //console.log("e[datacontact.length].value",e[datacontact.length].value);
   }
 
   // handle onChange event of the dropdown
@@ -147,8 +164,6 @@ var [selectedValueagents, setSelectedValueAgent] = useState([]);
     setSelectedValuestashs(Array.isArray(e) ? e.map(x => x.value) : []);
     console.log("e:",e);
     console.log("selectedValuestashs",selectedValuestashs);
-    //setstashs(datastashs => [...datastashs, "/api/stashs/" + e[datastashs.length].value]);
-    //console.log("e[datastashs.length].value",e[datastashs.length].value);
   }
 
   var resetValueContact = () => {
@@ -159,7 +174,6 @@ var [selectedValueagents, setSelectedValueAgent] = useState([]);
   var resetValueAgent = () => {
     setSelectedValueAgent([]);
   }
-
 
 var [nationality, setnationality] = useState ('France');
 var [contact, setValuecontact] = useState([]);
@@ -186,7 +200,8 @@ useEffect(() => {
     }, []);
 
 
-var optionsstashs = Object.values(stashs).map(({ id, codename }) => ({ label: codename, value: id }));
+var optionsstashs = Object.values(stashs).map(({ id, type }) => ({ label: type, value: id }));
+
 var optionsagent = Object.values(agent).map(({ id, name, isDisabled }) => ({ label: name, value: id , isDisabled:isDisabled}));
 var optionscontact = Object.values(contact).map(({ id, name }) => ({ label: name, value: id }))
 
@@ -219,18 +234,13 @@ function handleChangeTarget (e){
     console.log("e.nationality:",e);
     console.log("selectedValueTarget",selectedValueTarget);
     
-    
-    //settarget(datatarget => [...datatarget, "/api/targets/" + e[datatarget.length].value]);
-    //console.log("e[datatarget.length].value",e[datatarget.length].value);
-    
     var indextodelete = [];
     
     for (let i = 0; i < (e.length) ; i++) {
     
     nationalityTarget.push(e[i].nationality);
     console.log("target:", e[i].nationality);
-    
-    
+      
     for (let j = 0; j < (agent.length) ; j++) {
         
         console.log("j",j);
@@ -252,24 +262,10 @@ function handleChangeTarget (e){
     }
     }
     }
-   // var [selectedValueagents, setSelectedValueAgent] = useState([]);
-    //var [Valueagents, getValueagents] = useState([]);
-    
-    
+       
     var [selectedValueSpeciality, setSelectedValueSpeciality] = useState([]);
     
-    
-    //var  choiceidspeciality = [];
-    /*
-    var getagentswithspec = useCallback((id) => {axios.get('http://localhost/api/specialities/' + id )
-    .then(function (response) {
-      getValueagents(response.data.agents);
-      console.log("getValueagents",response.data.agents);
-      setSelectedValueAgent(response.data.agents) })
-    },[]);
-    
-    */
-    
+  
     function handleChangeSpeciality (e) {
       setSelectedValueSpeciality(e);
       console.log("selectedValueSpeciality",selectedValueSpeciality);
@@ -299,12 +295,9 @@ function handleChangeTarget (e){
       
           if (findornot === true ) {
           console.log("find:", j, findornot);
-          //console.log("agentlist[j]:", j, agentlist[j]);
       
           } else {
           console.log("notfind:", findornot);
-          //console.log("agentlist[j]:", j, agentlist[j]);
-          //Object.assign(agent[j],{isDisabled:"true"});
           if (agent[j].isDisabled === "false") {
       
           Object.assign(agent[j],{isDisabled:"true"});
@@ -323,23 +316,11 @@ function handleChangeTarget (e){
   
   
       setSelectedValueAgent(Array.isArray(e) ? e.map(x => x.value) : []);
-      console.log("e:",e);
-      console.log("selectedValueAgent",selectedValueAgent);
-      
-      //setagent(dataagent => [...dataagent, "/api/agents/" + e[dataagent.length].value])
-      //console.log("key:" ,dataagent.length);
-      //if (dataagent.length<1) {
-      //      console.log("liste avec la spec requise", dataagent);
-     //     } else {
-     //       console.log("liste globale", dataagent );
-     //       
-     // 
-      //    }
-  
+      //console.log("e:",e);
+      //console.log("selectedValueAgent",selectedValueAgent);
       optionsagent = Object.values(agent).map(({ id, name, isDisabled }) => ({ label: name, value: id , isDisabled:"true"}));
-      setoptionsagent(optionsagent);
-      
-      console.log("optionsagenthandle" , optionsagent);
+      setoptionsagent(optionsagent);     
+      //console.log("optionsagenthandle" , optionsagent);
       
       
       }
@@ -418,9 +399,6 @@ function handleChangeTarget (e){
   console.log("selectedValueTarget",selectedValueTarget);
   
   
-  //settarget(datatarget => [...datatarget, "/api/targets/" + e[datatarget.length].value]);
-  //console.log("e[datatarget.length].value",e[datatarget.length].value);
-  
   var indextodelete = [];
   
   for (let i = 0; i < (e.length) ; i++) {
@@ -460,7 +438,9 @@ const id = history.location.state.id;
 console.log('idpassed:', id );
 
 
-function loadvaluemissions () {customAxios.get('api/missions/' + id )
+function loadvaluemissions () {customAxios.get('api/missions/' + id,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   
      .then((response) => {
       getValueid(response.data.id); 
@@ -484,12 +464,15 @@ function loadvaluemissions () {customAxios.get('api/missions/' + id )
       setstatus(response.data.status);
 
       getValuebegindate(response.data.begindate); 
-      console.log("begindate",response.data.begindate);
-      var now = new Date(response.data.begindate);
-      //console.log("now",now);
-      var dateString = now.toISOString().slice(0, 10)
-      //console.log("dateString",dateString);
-      setbegindate(dateString);    
+      var dateStringbegin = response.data.begindate.substr(0, 10);
+      setbegindate(dateStringbegin);   
+      
+      getValueenddate(response.data.enddate); 
+      console.log(response.data.enddate);
+      if (response.data.enddate != undefined) {
+      var dateStringend = response.data.enddate.substr(0, 10);
+      setenddate(dateStringend);  
+      }
 
       getValuespeciality(response.data.speciality);
       console.log(response.data.speciality);
@@ -614,6 +597,11 @@ return (
       <Form.Control type="date" name="debutdelamission" value={begindate} onChange={handleChangeBegindate} placeholder="debut de la mission" />
     </Form.Group>
 
+    <Form.Group as={Col} controlId="FormdebutMission">
+      <Form.Label>Date de Fin de la mission</Form.Label>
+      <Form.Control type="date" name="findelamission" value={enddate} onChange={handleChangeEnddate} placeholder="fin de la mission" />
+    </Form.Group>
+
   </Form.Row>
 
   <Form.Row>
@@ -640,7 +628,7 @@ return (
    </Form.Group>
 
   <Form.Group  as={Col}  lg="5" controlId="FormstashsMissions" >     
-  <Form.Label>Choisir une planque - 0 ou plusieurs</Form.Label>     
+  <Form.Label>Planque(s)</Form.Label>     
         <Select
         className="reactSelectstash"
         placeholder="Select stash"
@@ -654,7 +642,7 @@ return (
   </Form.Group>
 
   <Form.Group as={Col}  lg="5" controlId="FormTarget" >     
-    <Form.Label>Choisir une ou plusieurs cible - </Form.Label>     
+    <Form.Label>Cible(s) - </Form.Label>     
         <Select
         className="reactSelecttarget"
         placeholder="Select target"
@@ -685,7 +673,7 @@ return (
   </Form.Group>
 
   <Form.Group as={Col}  lg="5" controlId="Formagents" >     
-    <Form.Label>Choisir un ou plusieurs agents</Form.Label>     
+    <Form.Label>Agents(s)</Form.Label>     
         <Select
         className="reactSelectagents"
         placeholder="Select agents"
@@ -701,7 +689,7 @@ return (
 
 
   <Form.Group as={Col}  lg="5" controlId="Formcontacts" >     
-    <Form.Label>Choisir un ou plusieurs contacts</Form.Label>     
+    <Form.Label>Contact(s)</Form.Label>     
         <Select
         className="reactSelectcontacts"
         placeholder="Select contacts"

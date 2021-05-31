@@ -11,6 +11,9 @@ import makeAnimated from 'react-select/animated';
 
 export default function ModifyContacts () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse  
+
 var [contacts, setValuecontacts] = useState([]);
 
 var [Valuename, getValuename] = useState([]);
@@ -25,7 +28,9 @@ var listItems =[];
 
 
 var [datacontacts, setcontacts] = useState([]);
-var loadcontacts = useCallback(() => {customAxios.get("api/contacts")
+var loadcontacts = useCallback(() => {customAxios.get("api/contacts",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValuecontacts(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -49,7 +54,9 @@ console.log("selectedValuecontacts.id",selectedValuecontacts.id);
 console.log("e.value",e.value);
 var id = e.value;
 
-customAxios.get('api/contacts/' + id )
+customAxios.get('api/contacts/' + id ,{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   
      .then((response) => {
       getValueid(response.data.id);
@@ -123,18 +130,39 @@ const handleSubmit = (e) => {
     surname:surname, 
     birthdate:birthdate,
     codename:codename,
-    nationality:nationality})
+    nationality:nationality},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
     .then(res => {console.log(res)})
     .catch(error => console.log(error));
+          getValueid("");
+      getValuename("");
+      setnamecontact("");
+      getValuesurname("");
+      setsurname("");
+      getValuebirthdate(""); 
+      setbirthdate("");    
+      getValuecodename("");
+      setcodename("");
+      getValuenationality("");
+      setnationality("");
+      loadcontacts();
 }
 
 var resetallValue = () => {
 
-  // console.log("namecontact",namecontact);
-  // console.log("surname",surname);
-  // console.log("birthdate",birthdate);
-  // console.log("codename",codename);
-  // console.log("nationality",nationality);
+      getValueid("");
+      getValuename("");
+      setnamecontact("");
+      getValuesurname("");
+      setsurname("");
+      getValuebirthdate(""); 
+      setbirthdate("");    
+      getValuecodename("");
+      setcodename("");
+      getValuenationality("");
+      setnationality("");
+      loadcontacts();
 
 }
 

@@ -9,6 +9,9 @@ import makeAnimated from 'react-select/animated';
 
 export default function NewAgents () {
 
+var tokentuse = sessionStorage.getItem("token");
+var tokenforapi = "Bearer" + " " + tokentuse  
+
 const animatedComponents = makeAnimated();
 
 const [nameAgent, setnameAgent] = useState ('');
@@ -25,7 +28,9 @@ const handleChangespec = (event) => {
   console.log(event.target.value);
 }
 
-var loadspeciality = useCallback(() => {customAxios.get("api/specialities")
+var loadspeciality = useCallback(() => {customAxios.get("api/specialities",{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
   .then(function (response) {setValue(response.data['hydra:member'])})
   .catch(error => console.log(error));
 },[]);
@@ -102,7 +107,9 @@ const handleSubmitAgent = (e) => {
      birthdate:birthdate,
      codename:parseInt(codename),
      nationality:nationality,
-     speciality : choiceidspeciality})
+     speciality : choiceidspeciality},{headers: { 
+      'Content-Type': 'application/json',
+       Authorization: tokenforapi}})
      .then(res => {console.log(res)})
      .catch(error => console.log(error));
 
